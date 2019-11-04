@@ -22,7 +22,7 @@ class RequestHandler
 
     public function __construct(Notifier $notifier)
     {
-        $this->debug = ($_ENV['DEBUG'] == 1);
+        $this->debug = ($_SERVER['DEBUG'] == 1);
         $this->processor = new PayloadProcessor();
         $this->notifier = $notifier;
     }

@@ -13,17 +13,14 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Build
+    - name: Build image
       run: docker build -t ${GITHUB_REPOSITORY}:${GITHUB_SHA::8} -t ${GITHUB_REPOSITORY}:latest .
 
-    - name: Login
+    - name: Login to Docker Hub
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
       run: echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
 
-    - name: Push with tag
-      run: docker push ${GITHUB_REPOSITORY}:${GITHUB_SHA::8}
-
-    - name: Push as latest
-      run: docker push ${GITHUB_REPOSITORY}:latest
+    - name: Push to Docker Hub
+      run: docker push ${GITHUB_REPOSITORY}

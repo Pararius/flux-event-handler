@@ -9,11 +9,11 @@ class SlackNotifier implements Notifier
 
     public function __construct()
     {
-        if (empty($_ENV['SLACK_WEBHOOK_URL'])) {
+        if (empty($_SERVER['SLACK_WEBHOOK_URL'])) {
             throw new \RuntimeException('The SLACK_WEBHOOK_URL environment variable must be set.');
         }
 
-        $this->webhookUrl = $_ENV['SLACK_WEBHOOK_URL'];
+        $this->webhookUrl = $_SERVER['SLACK_WEBHOOK_URL'];
     }
 
     public function notify(Notification $notification)
@@ -29,8 +29,8 @@ class SlackNotifier implements Notifier
                         'title_link' => $notification->titleLink,
                         'text' => $notification->body
                     ],
-                    'username' => $_ENV['SLACK_USERNAME'] ?? 'Flux',
-                    'icon_emoji' => $_ENV['SLACK_ICON'] ?? ':cloud:'
+                    'username' => $_SERVER['SLACK_USERNAME'] ?? 'Flux',
+                    'icon_emoji' => $_SERVER['SLACK_ICON'] ?? ':cloud:'
                 ])
             ]
         ];
