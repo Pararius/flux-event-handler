@@ -5,5 +5,5 @@ namespace TreeHouse\Notifier;
 
 interface Notifier
 {
-    public function notify(string $text);
+    public function notify(Notification $notification);
 }

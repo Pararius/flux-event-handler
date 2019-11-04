@@ -16,14 +16,19 @@ class SlackNotifier implements Notifier
         $this->webhookUrl = $_ENV['SLACK_WEBHOOK_URL'];
     }
 
-    public function notify(string $text)
+    public function notify(Notification $notification)
     {
         $options = [
             'http' => [
                 'header'  => ['Content-type: application/json'],
                 'method'  => 'POST',
                 'content' => json_encode([
-                    'text' => $text,
+                    'attachments' => [
+                        'fallback' => $notification->body,
+                        'title' => $notification->title,
+                        'title_link' => $notification->titleLink,
+                        'text' => $notification->body
+                    ],
                     'username' => $_ENV['SLACK_USERNAME'] ?? 'Flux',
                     'icon_emoji' => $_ENV['SLACK_ICON'] ?? ':cloud:'
                 ])

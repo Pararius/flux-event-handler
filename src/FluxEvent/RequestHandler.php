@@ -6,10 +6,14 @@ namespace TreeHouse\FluxEvent;
 use Amp\Http\Server\Request;
 use Amp\Http\Server\Response;
 use Amp\Http\Status;
+use TreeHouse\Notifier\Notification;
 use TreeHouse\Notifier\Notifier;
 
 class RequestHandler
 {
+    /** @var bool */
+    private $debug;
+
     /** @var PayloadProcessor */
     private $processor;
 
@@ -18,6 +22,7 @@ class RequestHandler
 
     public function __construct(Notifier $notifier)
     {
+        $this->debug = ($_ENV['DEBUG'] == 1);
         $this->processor = new PayloadProcessor();
         $this->notifier = $notifier;
     }
@@ -31,20 +36,29 @@ class RequestHandler
             }
 
             try {
-                $changes = $this->processor->process($payload);
+                $processedPayload = $this->processor->process($payload);
 
                 $response = '';
-                foreach ($changes as $oldImage => $newImage) {
+                foreach ($processedPayload['changes'] as $oldImage => $newImage) {
                     $response .= sprintf('* %s updated to %s', $oldImage, $newImage) . PHP_EOL;
                 }
 
-                $this->notifier->notify($response);
+                $notification = new Notification();
+
+                if (!$this->debug) {
+                    $notification->title = $processedPayload['title'];
+                    $notification->titleLink = $processedPayload['titleLink'];
+                }
+
+                $notification->body = $response;
+
+                $this->notifier->notify($notification);
             } catch (\RuntimeException $e) {
                 $response = $e->getMessage();
             }
         }
 
-        $responseText = ($_ENV['DEBUG'] == 1) ? $payload . PHP_EOL . $response : $response;
+        $responseText = ($this->debug) ? $payload . PHP_EOL . $response : $response;
         return new Response(Status::OK, ["content-type" => "text/plain; charset=utf-8"], $responseText);
     }
 }

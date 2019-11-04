@@ -5,8 +5,8 @@ namespace TreeHouse\Notifier;
 
 class StdoutNotifier implements Notifier
 {
-    public function notify(string $text)
+    public function notify(Notification $notification)
     {
-        echo $text;
+        echo $notification->body;
     }
 }

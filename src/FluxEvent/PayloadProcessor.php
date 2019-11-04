@@ -11,7 +11,11 @@ class PayloadProcessor
     public function process(string $json): array
     {
         $payload = json_decode($json);
-        $changes = [];
+        $response = [
+            'title' => $payload->Title,
+            'titleLink' => $payload->TitleLink,
+            'changes' => []
+        ];
 
         switch ($payload->Type) {
             case 'commit':
@@ -19,12 +23,12 @@ class PayloadProcessor
                     $oldImage = $workload->Container->Image;
                     $newImage = $workload->ImageID;
 
-                    if (!array_key_exists($oldImage, $changes)) {
-                        $changes[$oldImage] = $newImage;
+                    if (!array_key_exists($oldImage, $response['changes'])) {
+                        $response['changes'][$oldImage] = $newImage;
                     }
                 }
 
-                return $changes;
+                break;
             default:
                 throw new \RuntimeException(sprintf(
                     'Unknown payload type %s triggered by %s',
@@ -32,5 +36,7 @@ class PayloadProcessor
                     $payload->TitleLink ?? 'unknown'
                 ));
         }
+
+        return $response;
     }
 }
