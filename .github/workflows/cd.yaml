@@ -1,0 +1,29 @@
+---
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Build
+      run: docker build -t ${GITHUB_REPOSITORY}:${GITHUB_SHA::8} .
+
+    - name: Login
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
+      run: echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
+
+    - name: Push with tag
+      run: docker push ${GITHUB_REPOSITORY}:${GITHUB_SHA::8}
+
+    - name: Push as latest
+      run: docker push ${GITHUB_REPOSITORY}:latest
