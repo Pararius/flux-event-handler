@@ -21,4 +21,6 @@ COPY --from=build /app/vendor /app/vendor
 
 EXPOSE 80
 
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
 CMD ["php", "/app/server.php"]
