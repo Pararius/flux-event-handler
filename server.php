@@ -6,9 +6,9 @@ use Amp\Http\Server\RequestHandler\CallableRequestHandler;
 use Amp\Http\Server\Server;
 use Amp\Socket;
 use TreeHouse\FluxEvent\RequestHandler;
-use TreeHouse\FluxEvent\SlackNotifier;
-use TreeHouse\FluxEvent\StdoutNotifier;
 use TreeHouse\Log\StdoutLogger;
+use TreeHouse\Notifier\SlackNotifier;
+use TreeHouse\Notifier\StdoutNotifier;
 
 Amp\Loop::run(function () {
     $sockets = [Socket\listen('0.0.0.0:80')];
