@@ -1,0 +1,24 @@
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+use Amp\Http\Server\Request;
+use Amp\Http\Server\RequestHandler\CallableRequestHandler;
+use Amp\Http\Server\Server;
+use Amp\Socket;
+use TreeHouse\FluxEvent\RequestHandler;
+use TreeHouse\FluxEvent\SlackNotifier;
+use TreeHouse\FluxEvent\StdoutNotifier;
+use TreeHouse\Log\StdoutLogger;
+
+Amp\Loop::run(function () {
+    $sockets = [Socket\listen('0.0.0.0:80')];
+    $server = new Server($sockets, new CallableRequestHandler(
+        function(Request $request) {
+            $notifier = ($_ENV['DEBUG'] == 1) ? new StdoutNotifier() : new SlackNotifier();
+            $requestHandler = new RequestHandler($notifier);
+            return $requestHandler->handle($request);
+        }
+    ), new StdoutLogger());
+
+    yield $server->start();
+});

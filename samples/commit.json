@@ -1,0 +1,79 @@
+{
+  "TitleLink": "https://github.com/octocat/Hello-World/commit/7fd1a60b01f91b314f59955a4e4d4e80d8edf11d",
+  "Body": "Event: Commit: 7fd1a60, namespace:cronjob/some-job, namespace:deployment/some-deployment\\n\\nResources updated:\\n\\n* namespace:cronjob/some-job\\n\\n* namespace:deployment/some-deployment",
+  "Type": "commit",
+  "Title": "Applied flux changes to cluster",
+  "Event": {
+    "id": 0,
+    "serviceIDs": [
+      "namespace:cronjob/some-job",
+      "namespace:deployment/some-deployment"
+    ],
+    "type": "commit",
+    "startedAt": "2019-10-31T10:53:35.475945998Z",
+    "endedAt": "2019-10-31T10:53:35.475945998Z",
+    "logLevel": "info",
+    "metadata": {
+      "revision": "7fd1a60b01f91b314f59955a4e4d4e80d8edf11d",
+      "spec": {
+        "type": "auto",
+        "cause": {
+          "Message": "",
+          "User": ""
+        },
+        "spec": {
+          "Changes": [
+            {
+              "ServiceID": "",
+              "Container": {
+                "Name": "app",
+                "Image": "ubuntu:19.04"
+              },
+              "ImageID": "ubuntu:19.10"
+            },
+            {
+              "ServiceID": "",
+              "Container": {
+                "Name": "db",
+                "Image": "postgres:11.5"
+              },
+              "ImageID": "postgres:12.0"
+            }
+          ]
+        }
+      },
+      "result": {
+        "namespace:cronjob/irrelevant": {
+          "Status": "ignored",
+          "Error": "not included",
+          "PerContainer": null
+        },
+        "namespace:helmrelease/some-release": {
+          "Status": "ignored",
+          "Error": "not included",
+          "PerContainer": null
+        },
+        "namespace:cronjob/some-job": {
+          "Status": "success",
+          "PerContainer": [
+            {
+              "Container": "application",
+              "Current": "ubuntu:19.04",
+              "Target": "ubuntu:19.10"
+            }
+          ]
+        },
+        "namespace:deployment/some-deployment": {
+          "Status": "success",
+          "PerContainer": [
+            {
+              "Container": "db",
+              "Current": "postgres:11.5",
+              "Target": "postgres:12"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

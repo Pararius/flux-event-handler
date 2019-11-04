@@ -1,0 +1,20 @@
+---
+version: '2'
+services:
+  composer:
+    image: composer:1.9
+    command: ["install"]
+    volumes:
+      - .:/app
+
+  php:
+    image: php:7.3-cli-alpine
+    command: ["php", "-d", "zend.assertions=-1", "/app/server.php"]
+    environment:
+      DEBUG: 1
+    ports:
+      - 8081:80
+    volumes:
+      - ./src:/app/src
+      - ./vendor:/app/vendor
+      - ./server.php:/app/server.php
