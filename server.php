@@ -6,7 +6,7 @@ use Amp\Http\Server\RequestHandler\CallableRequestHandler;
 use Amp\Http\Server\Server;
 use Amp\Socket;
 use TreeHouse\FluxEvent\RequestHandler;
-use TreeHouse\Log\StdoutLogger;
+use TreeHouse\Log\IoLogger;
 use TreeHouse\Notifier\SlackNotifier;
 use TreeHouse\Notifier\StdoutNotifier;
 
@@ -18,7 +18,7 @@ Amp\Loop::run(function () {
             $requestHandler = new RequestHandler($notifier);
             return $requestHandler->handle($request);
         }
-    ), new StdoutLogger());
+    ), new IoLogger());
 
     yield $server->start();
 });
