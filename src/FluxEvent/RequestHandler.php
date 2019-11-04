@@ -35,7 +35,7 @@ class RequestHandler
 
                 $response = '';
                 foreach ($changes as $oldImage => $newImage) {
-                    $response .= sprintf('%s updated to %s', $oldImage, $newImage) . PHP_EOL;
+                    $response .= sprintf('* %s updated to %s', $oldImage, $newImage) . PHP_EOL;
                 }
 
                 $this->notifier->notify($response);
