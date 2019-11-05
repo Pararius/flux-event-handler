@@ -3,9 +3,20 @@
         "ext-json": "*",
         "amphp/http-server": "^1.1"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^8.4"
+    },
     "autoload": {
         "psr-4": {
             "TreeHouse\\": "src"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit tests/."
     }
 }

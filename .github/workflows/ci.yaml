@@ -1,0 +1,29 @@
+---
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install dependencies
+        run: composer install --optimize-autoloader
+
+      - name: Run PHPUnit tests
+        run: composer run-script test
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Build image
+        run: docker build .
