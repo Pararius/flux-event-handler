@@ -69,7 +69,7 @@
             {
               "Container": "db",
               "Current": "postgres:11.5",
-              "Target": "postgres:12"
+              "Target": "postgres:12.0"
             }
           ]
         }
