@@ -27,17 +27,17 @@
               "ServiceID": "",
               "Container": {
                 "Name": "app",
-                "Image": "ubuntu:19.04"
+                "Image": "docker.io/ubuntu:19.04"
               },
-              "ImageID": "ubuntu:19.10"
+              "ImageID": "docker.io/ubuntu:19.10"
             },
             {
               "ServiceID": "",
               "Container": {
                 "Name": "db",
-                "Image": "postgres:11.5"
+                "Image": "docker.io/postgres:11.5"
               },
-              "ImageID": "postgres:12.0"
+              "ImageID": "docker.io/postgres:12.0"
             }
           ]
         }
@@ -58,8 +58,8 @@
           "PerContainer": [
             {
               "Container": "application",
-              "Current": "ubuntu:19.04",
-              "Target": "ubuntu:19.10"
+              "Current": "docker.io/ubuntu:19.04",
+              "Target": "docker.io/ubuntu:19.10"
             }
           ]
         },
@@ -68,8 +68,8 @@
           "PerContainer": [
             {
               "Container": "db",
-              "Current": "postgres:11.5",
-              "Target": "postgres:12.0"
+              "Current": "docker.io/postgres:11.5",
+              "Target": "docker.io/postgres:12.0"
             }
           ]
         }

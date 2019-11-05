@@ -45,13 +45,14 @@ class RequestHandler
                 $response = '';
                 foreach ($processedPayload['changes'] as $oldImage => $newImage) {
                     if ($this->shortImageNames) {
+                        $fullImage = $oldImage;
                         $oldImage = $this->shortImage($oldImage);
                         $newImage = $this->shortImage($newImage);
                     }
 
                     $response .= sprintf(
                         '* [%s] %s updated to %s',
-                        $processedPayload['namespaces'][$oldImage],
+                        $processedPayload['namespaces'][$fullImage ?? $oldImage],
                         $oldImage,
                         $newImage
                     ) . PHP_EOL;
