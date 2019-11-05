@@ -14,17 +14,21 @@ class RequestHandler
     /** @var bool */
     private $debug;
 
+    /** @var Notifier */
+    private $notifier;
+
     /** @var PayloadProcessor */
     private $processor;
 
-    /** @var Notifier */
-    private $notifier;
+    /** @var bool */
+    private $shortImageNames;
 
     public function __construct(Notifier $notifier)
     {
         $this->debug = ($_SERVER['DEBUG'] == 1);
         $this->processor = new PayloadProcessor();
         $this->notifier = $notifier;
+        $this->shortImageNames = $_SERVER['SHORT_IMAGE_NAMES'] ?? true;
     }
 
     public function handle(Request $request)
@@ -40,6 +44,11 @@ class RequestHandler
 
                 $response = '';
                 foreach ($processedPayload['changes'] as $oldImage => $newImage) {
+                    if ($this->shortImageNames) {
+                        $oldImage = $this->shortImage($oldImage);
+                        $newImage = $this->shortImage($newImage);
+                    }
+
                     $response .= sprintf('* %s updated to %s', $oldImage, $newImage) . PHP_EOL;
                 }
 
@@ -60,5 +69,14 @@ class RequestHandler
 
         $responseText = ($this->debug) ? $payload . PHP_EOL . $response : $response;
         return new Response(Status::OK, ["content-type" => "text/plain; charset=utf-8"], $responseText);
+    }
+
+    private function shortImage(string $image)
+    {
+        if (($pos = strrpos($image, '/')) !== false) {
+            return substr($image, $pos);
+        }
+
+        return $image;
     }
 }
