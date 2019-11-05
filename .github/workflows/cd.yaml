@@ -3,6 +3,10 @@ name: Continuous Deployment
 
 on:
   push:
+    paths:
+    - 'src/**'
+    - 'composer.*'
+    - 'server.php'
     branches:
     - master
 
