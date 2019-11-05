@@ -74,7 +74,7 @@ class RequestHandler
     private function shortImage(string $image)
     {
         if (($pos = strrpos($image, '/')) !== false) {
-            return substr($image, $pos);
+            return substr($image, ++$pos);
         }
 
         return $image;
