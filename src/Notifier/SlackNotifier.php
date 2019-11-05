@@ -18,20 +18,23 @@ class SlackNotifier implements Notifier
 
     public function notify(Notification $notification)
     {
+        // json_encode messes up the payload and makes it invalid, so build it manually
+        $json = sprintf(
+            '{
+                "attachments": [{"fallback": "%s", "title": "%s", "title_link": "%s", "text": "%s"}],
+                "username": "%s",
+                "icon_emoji": "%s"
+            }',
+            $notification->body, $notification->title, $notification->titleLink, $notification->body,
+            $_SERVER['SLACK_USERNAME'] ?? 'Flux',
+            $_SERVER['SLACK_ICON'] ?? ':cloud:'
+        );
+
         $options = [
             'http' => [
                 'header'  => ['Content-type: application/json'],
                 'method'  => 'POST',
-                'content' => json_encode([
-                    'attachments' => [
-                        'fallback' => $notification->body,
-                        'title' => $notification->title,
-                        'title_link' => $notification->titleLink,
-                        'text' => $notification->body
-                    ],
-                    'username' => $_SERVER['SLACK_USERNAME'] ?? 'Flux',
-                    'icon_emoji' => $_SERVER['SLACK_ICON'] ?? ':cloud:'
-                ])
+                'content' => $json,
             ]
         ];
 

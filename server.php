@@ -14,7 +14,8 @@ Amp\Loop::run(function () {
     $sockets = [Socket\listen('0.0.0.0:80')];
     $server = new Server($sockets, new CallableRequestHandler(
         function(Request $request) {
-            $notifier = ($_ENV['DEBUG'] == 1) ? new StdoutNotifier() : new SlackNotifier();
+            $debug = (isset($_SERVER['DEBUG']) && $_SERVER['DEBUG'] == 1);
+            $notifier = ($debug) ? new StdoutNotifier() : new SlackNotifier();
             $requestHandler = new RequestHandler($notifier);
             return $requestHandler->handle($request);
         }
