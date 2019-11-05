@@ -49,7 +49,12 @@ class RequestHandler
                         $newImage = $this->shortImage($newImage);
                     }
 
-                    $response .= sprintf('* %s updated to %s', $oldImage, $newImage) . PHP_EOL;
+                    $response .= sprintf(
+                        '* [%s] %s updated to %s',
+                        $processedPayload['namespaces'][$oldImage],
+                        $oldImage,
+                        $newImage
+                    ) . PHP_EOL;
                 }
 
                 $notification = new Notification();

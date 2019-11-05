@@ -14,7 +14,8 @@ class PayloadProcessor
         $response = [
             'title' => $payload->Title,
             'titleLink' => $payload->TitleLink,
-            'changes' => []
+            'changes' => [],
+            'namespaces' => [],
         ];
 
         switch ($payload->Type) {
@@ -25,6 +26,11 @@ class PayloadProcessor
 
                     if (!array_key_exists($oldImage, $response['changes'])) {
                         $response['changes'][$oldImage] = $newImage;
+                    }
+
+                    if (!array_key_exists($oldImage, $response['namespaces'])) {
+                        $namespace = $this->findNamespace($payload, $oldImage);
+                        $response['namespaces'][$oldImage] = $namespace;
                     }
                 }
 
@@ -38,5 +44,20 @@ class PayloadProcessor
         }
 
         return $response;
+    }
+
+    private function findNamespace(object $payload, string $image): string
+    {
+        foreach ($payload->Event->metadata->result as $workload => $result) {
+            if (!empty($result->PerContainer)) {
+                foreach ($result->PerContainer as $container) {
+                    if ($container->Current == $image) {
+                        return substr($workload, 0, strpos($workload, ':'));
+                    }
+                }
+            }
+        }
+
+        return 'unknown';
     }
 }

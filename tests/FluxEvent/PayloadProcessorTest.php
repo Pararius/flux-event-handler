@@ -17,7 +17,8 @@ class PayloadProcessorTest extends TestCase
             [
                 'title' => 'Applied flux changes to cluster',
                 'titleLink' => 'https://github.com/octocat/Hello-World/commit/7fd1a60b01f91b314f59955a4e4d4e80d8edf11d',
-                'changes' => ['ubuntu:19.04' => 'ubuntu:19.10', 'postgres:11.5' => 'postgres:12.0']
+                'changes' => ['ubuntu:19.04' => 'ubuntu:19.10', 'postgres:11.5' => 'postgres:12.0'],
+                'namespaces' => ['ubuntu:19.04' => 'namespace', 'postgres:11.5' => 'namespace']
             ],
             $result
         );
