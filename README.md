@@ -35,10 +35,13 @@ docker push your-org/flux-event-handler
 The application can be configured by defining environment variables.
 The following environment variables can be set:
 
-| Name              | Description                        | Required?                | Default |
-|-------------------|------------------------------------|--------------------------|---------|
-| DEBUG             | Control verbosity                  | No                       | False   |
-| SLACK_WEBHOOK_URL | URL to your Slack incoming webhook | If SlackNotifier is used | -       |
-| SHORT_IMAGE_NAMES | Use short image names in output    | No                       | True    |
-| SLACK_USERNAME    | Username to post to Slack with     | No                       | Flux    |
-| SLACK_ICON        | User icon to post to Slack with    | No                       | :cloud: |
+| Name              | Description                         | Required?                | Default |
+|-------------------|-------------------------------------|--------------------------|---------|
+| DEBUG             | Control verbosity                   | No                       | False   |
+| SLACK_WEBHOOK_URL | URL to your Slack incoming webhook  | If SlackNotifier is used | -       |
+| SHORT_IMAGE_NAMES | Use short image names in output     | No                       | True    |
+| SLACK_USERNAME    | Username to post to Slack with      | No                       | Flux    |
+| SLACK_ICON        | User icon to post to Slack with     | No                       | :cloud: |
+| NAMESPACE_MAPPING | Namespace notification [mapping][1] | No                       | -       |
+
+[1]: src/Notifier/NamespaceMapper.php

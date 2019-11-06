@@ -8,23 +8,34 @@ use TreeHouse\FluxEvent\ProcessedPayload;
 class Notification
 {
     /** @var string */
+    public $body;
+
+    /** @var string */
+    public $channel;
+
+    /** @var string */
     public $title;
 
     /** @var string */
     public $titleLink;
 
-    /** @var string */
-    public $body;
-
-    public function __construct(string $title = null, string $titleLink = null, string $body = null)
-    {
+    public function __construct(
+        string $title = null,
+        string $titleLink = null,
+        string $body = null,
+        string $channel = null
+    ) {
         $this->title = $title;
         $this->titleLink = $titleLink;
         $this->body = $body;
+        $this->channel = $channel;
     }
 
-    public static function fromProcessedPayload(ProcessedPayload $processedPayload, string $body = null): self
-    {
-        return new static($processedPayload->title, $processedPayload->titleLink, $body);
+    public static function fromProcessedPayload(
+        ProcessedPayload $processedPayload,
+        string $body = null,
+        string $channel = null
+    ): self {
+        return new static($processedPayload->title, $processedPayload->titleLink, $body, $channel);
     }
 }

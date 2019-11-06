@@ -24,10 +24,12 @@ class SlackNotifier implements Notifier
                 "attachments": [{"fallback": "%s", "title": "%s", "title_link": "%s", "text": "%s"}],
                 "username": "%s",
                 "icon_emoji": "%s"
+                %s
             }',
             $notification->body, $notification->title, $notification->titleLink, $notification->body,
             $_SERVER['SLACK_USERNAME'] ?? 'Flux',
-            $_SERVER['SLACK_ICON'] ?? ':cloud:'
+            $_SERVER['SLACK_ICON'] ?? ':cloud:',
+            (!empty($notification->channel)) ? sprintf(', "channel": "%s"', $notification->channel) : null
         );
 
         $options = [
