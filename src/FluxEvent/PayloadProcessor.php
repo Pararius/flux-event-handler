@@ -8,15 +8,15 @@ class PayloadProcessor
     /**
      * @throws \RuntimeException
      */
-    public function process(string $json): array
+    public function process(string $json): ProcessedPayload
     {
         $payload = json_decode($json);
-        $response = [
-            'title' => $payload->Title,
-            'titleLink' => $payload->TitleLink,
-            'changes' => [],
-            'namespaces' => [],
-        ];
+
+        $processedPayload = new ProcessedPayload();
+        $processedPayload->title = $payload->Title;
+        $processedPayload->titleLink = $payload->TitleLink;
+        $processedPayload->changes = [];
+        $processedPayload->namespaces = [];
 
         switch ($payload->Type) {
             case 'commit':
@@ -24,13 +24,13 @@ class PayloadProcessor
                     $oldImage = $workload->Container->Image;
                     $newImage = $workload->ImageID;
 
-                    if (!array_key_exists($oldImage, $response['changes'])) {
-                        $response['changes'][$oldImage] = $newImage;
+                    if (!array_key_exists($oldImage, $processedPayload->changes)) {
+                        $processedPayload->changes[$oldImage] = $newImage;
                     }
 
-                    if (!array_key_exists($oldImage, $response['namespaces'])) {
+                    if (!array_key_exists($oldImage, $processedPayload->namespaces)) {
                         $namespace = $this->findNamespace($payload, $oldImage);
-                        $response['namespaces'][$oldImage] = $namespace;
+                        $processedPayload->namespaces[$oldImage] = $namespace;
                     }
                 }
 
@@ -43,7 +43,7 @@ class PayloadProcessor
                 ));
         }
 
-        return $response;
+        return $processedPayload;
     }
 
     private function findNamespace(object $payload, string $image): string

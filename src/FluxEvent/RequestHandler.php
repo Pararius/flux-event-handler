@@ -41,33 +41,9 @@ class RequestHandler
 
             try {
                 $processedPayload = $this->processor->process($payload);
+                $response = $this->createResponse($processedPayload);
 
-                $response = '';
-                foreach ($processedPayload['changes'] as $oldImage => $newImage) {
-                    if ($this->shortImageNames) {
-                        $fullImage = $oldImage;
-                        $oldImage = $this->shortImage($oldImage);
-                        $newImage = $this->shortImage($newImage);
-                    }
-
-                    $response .= sprintf(
-                        '* [%s] %s updated to %s',
-                        $processedPayload['namespaces'][$fullImage ?? $oldImage],
-                        $oldImage,
-                        $newImage
-                    ) . PHP_EOL;
-                }
-
-                $notification = new Notification();
-
-                if (!$this->debug) {
-                    $notification->title = $processedPayload['title'];
-                    $notification->titleLink = $processedPayload['titleLink'];
-                }
-
-                $notification->body = $response;
-
-                $this->notifier->notify($notification);
+                $this->notifier->notify(Notification::fromProcessedPayload($processedPayload, $response));
             } catch (\RuntimeException $e) {
                 $response = $e->getMessage();
             }
@@ -84,5 +60,26 @@ class RequestHandler
         }
 
         return $image;
+    }
+
+    private function createResponse(ProcessedPayload $processedPayload): string
+    {
+        $response = '';
+        foreach ($processedPayload->changes as $oldImage => $newImage) {
+            if ($this->shortImageNames) {
+                $fullImage = $oldImage;
+                $oldImage = $this->shortImage($oldImage);
+                $newImage = $this->shortImage($newImage);
+            }
+
+            $response .= sprintf(
+                    '* [%s] %s updated to %s',
+                    $processedPayload->namespaces[$fullImage ?? $oldImage],
+                    $oldImage,
+                    $newImage
+                ) . PHP_EOL;
+        }
+
+        return $response;
     }
 }
