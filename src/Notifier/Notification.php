@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace TreeHouse\Notifier;
 
+use TreeHouse\FluxEvent\ProcessedPayload;
+
 class Notification
 {
     /** @var string */
@@ -19,5 +21,10 @@ class Notification
         $this->title = $title;
         $this->titleLink = $titleLink;
         $this->body = $body;
+    }
+
+    public static function fromProcessedPayload(ProcessedPayload $processedPayload, string $body = null): self
+    {
+        return new static($processedPayload->title, $processedPayload->titleLink, $body);
     }
 }
