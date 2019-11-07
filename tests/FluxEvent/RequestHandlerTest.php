@@ -10,9 +10,15 @@ use TreeHouse\Notifier\StdoutNotifier;
 
 class RequestHandlerTest extends TestCase
 {
+    public function setUp(): void
+    {
+        // Set dummy env vars
+        $_SERVER['DEBUG'] = 0;
+        $_SERVER['SLACK_WEBHOOK_URL'] = 'http://localhost:80';
+    }
+
     public function testValidNotifiers()
     {
-        $_SERVER['SLACK_WEBHOOK_URL'] = 'http://localhost';
         $requestHandler = new RequestHandler([new StdoutNotifier(), new SlackNotifier()]);
 
         $this->assertInstanceOf(RequestHandler::class, $requestHandler);
