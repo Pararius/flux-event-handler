@@ -36,4 +36,11 @@ class PayloadProcessorTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $processor->process(str_replace('"Type": "commit"', '"Type": "foo"', $json));
     }
+
+    public function testEmptyPayload()
+    {
+        $processor = new PayloadProcessor();
+        $this->expectException(\RuntimeException::class);
+        $processor->process('');
+    }
 }
