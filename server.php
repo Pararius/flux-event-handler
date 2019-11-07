@@ -15,8 +15,17 @@ Amp\Loop::run(function () {
     $server = new Server($sockets, new CallableRequestHandler(
         function(Request $request) {
             $debug = (isset($_SERVER['DEBUG']) && $_SERVER['DEBUG'] == 1);
-            $notifier = ($debug) ? new StdoutNotifier() : new SlackNotifier();
-            $requestHandler = new RequestHandler($notifier);
+            $notifiers = [];
+
+            if ($debug) {
+                $notifiers[] = new StdoutNotifier();
+            }
+
+            if (isset($_SERVER['SLACK_WEBHOOK_URL'])) {
+                $notifiers[] = new SlackNotifier();
+            }
+
+            $requestHandler = new RequestHandler($notifiers);
             return $requestHandler->handle($request);
         }
     ), new IoLogger());

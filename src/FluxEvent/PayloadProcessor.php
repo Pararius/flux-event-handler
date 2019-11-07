@@ -10,6 +10,10 @@ class PayloadProcessor
      */
     public function process(string $json): ProcessedPayload
     {
+        if (empty($json)) {
+            throw new \RuntimeException('Cannot process an empty payload.');
+        }
+
         $payload = json_decode($json);
 
         $processedPayload = new ProcessedPayload();

@@ -18,8 +18,8 @@ class RequestHandler
     /** @var string */
     private $namespaceMapping;
 
-    /** @var Notifier */
-    private $notifier;
+    /** @var Notifier[] */
+    private $notifiers;
 
     /** @var PayloadProcessor */
     private $processor;
@@ -27,13 +27,15 @@ class RequestHandler
     /** @var bool */
     private $shortImageNames;
 
-    public function __construct(Notifier $notifier)
+    public function __construct(array $notifiers)
     {
         $this->debug = ($_SERVER['DEBUG'] == 1);
         $this->processor = new PayloadProcessor();
         $this->namespaceMapping = $_SERVER['NAMESPACE_MAPPING'] ?? null;
-        $this->notifier = $notifier;
         $this->shortImageNames = $_SERVER['SHORT_IMAGE_NAMES'] ?? true;
+        $this->notifiers = $notifiers;
+
+        $this->verifyNotifiers($this->notifiers);
     }
 
     public function handle(Request $request)
@@ -59,9 +61,11 @@ class RequestHandler
                         $response = $this->createResponse($processedPayload, $namespace);
 
                         if (!empty($response)) {
-                            $this->notifier->notify(
-                                Notification::fromProcessedPayload($processedPayload, $response, $channel)
-                            );
+                            foreach ($this->notifiers as $notifier) {
+                                $notifier->notify(
+                                    Notification::fromProcessedPayload($processedPayload, $response, $channel)
+                                );
+                            }
                         }
                     }
                 } else {
@@ -69,7 +73,9 @@ class RequestHandler
                     $response = $this->createResponse($processedPayload);
 
                     if (!empty($response)) {
-                        $this->notifier->notify(Notification::fromProcessedPayload($processedPayload, $response));
+                        foreach ($this->notifiers as $notifier) {
+                            $notifier->notify(Notification::fromProcessedPayload($processedPayload, $response));
+                        }
                     }
                 }
             } catch (\RuntimeException $e) {
@@ -112,5 +118,18 @@ class RequestHandler
         }
 
         return $response;
+    }
+
+    private function verifyNotifiers(array $notifiers)
+    {
+        if (empty($notifiers)) {
+            throw new \RuntimeException('No Notifiers passed to RequestHandler');
+        }
+
+        foreach ($notifiers as $notifier) {
+            if (!$notifier instanceof Notifier) {
+                throw new \RuntimeException('Only Notifier instances may be passed to RequestHandler');
+            }
+        }
     }
 }
