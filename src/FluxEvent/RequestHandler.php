@@ -107,12 +107,16 @@ class RequestHandler
                 $newImage = $this->shortImage($newImage);
             }
 
+            list($oldImg, $oldTag) = explode(':', $oldImage);
+            list($newImg, $newTag) = explode(':', $newImage);
+
             if (is_null($namespace) || $workloadNamespace == $namespace) {
                 $response .= sprintf(
-                    '* [%s] %s updated to %s',
+                    '* [%s] %s updated from %s to %s',
                     $workloadNamespace,
-                    $oldImage,
-                    $newImage
+                    $oldImg,
+                    $oldTag,
+                    $newTag
                 ) . PHP_EOL;
             }
         }
