@@ -13,7 +13,19 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Get Composer cache directory
+        id: composer-cache-dir
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Attempt to get Composer cache
+        uses: actions/cache@v1
+        id: composer-cache
+        with:
+          path: ${{ steps.composer-cache-dir.outputs.dir }}
+          key: composer-${{ hashFiles('composer.lock') }}
+
       - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --optimize-autoloader
 
       - name: Run PHPUnit tests
