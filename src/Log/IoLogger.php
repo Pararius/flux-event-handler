@@ -66,6 +66,6 @@ class IoLogger implements LoggerInterface
             $log[] = serialize($context);
         }
 
-        fwrite($output, implode(PHP_EOL, $log));
+        fwrite($output, implode(PHP_EOL, $log) . PHP_EOL);
     }
 }
