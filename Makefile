@@ -8,5 +8,5 @@ build:
 
 # Can only deploy with valid Docker login present on dev machine (repo admins only)
 deploy:
-	docker build -t treehouselabs/flux-event-handler:$(git rev-parse --short=8 HEAD) -t treehouselabs/flux-event-handler:latest .
+	docker build -t treehouselabs/flux-event-handler:$(shell git rev-parse --short=8 HEAD) -t treehouselabs/flux-event-handler:latest .
 	docker push treehouselabs/flux-event-handler
