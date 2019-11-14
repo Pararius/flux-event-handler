@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace TreeHouse\FluxEvent;
 
+use TreeHouse\Log\IoLogger;
+
 class PayloadProcessor
 {
     /**
@@ -61,6 +63,10 @@ class PayloadProcessor
                 }
             }
         }
+
+        // If no namespace was found, fallback to "unknown", but log the payload for investigation.
+        $logger = new IoLogger();
+        $logger->debug('Could not determine namespace from received payload.', [$payload]);
 
         return 'unknown';
     }
