@@ -42,7 +42,8 @@ class RequestHandler
     {
         $payload = '';
         if ($request->getMethod() === 'POST') {
-            while (($data = yield $request->getBody(1048576)->read()) !== null) {
+            $request->getBody()->increaseSizeLimit(1048576);
+            while (($data = yield $request->getBody()->read()) !== null) {
                 $payload .= $data;
             }
 
