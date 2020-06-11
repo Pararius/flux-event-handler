@@ -6,6 +6,7 @@ namespace TreeHouse\FluxEvent;
 use Amp\Http\Server\Request;
 use Amp\Http\Server\Response;
 use Amp\Http\Status;
+use TreeHouse\Notifier\GithubMapper;
 use TreeHouse\Notifier\NamespaceMapper;
 use TreeHouse\Notifier\Notification;
 use TreeHouse\Notifier\Notifier;
@@ -14,6 +15,9 @@ class RequestHandler
 {
     /** @var bool */
     private $debug;
+
+    /** @var array */
+    private $githubMapping;
 
     /** @var string */
     private $namespaceMapping;
@@ -31,6 +35,7 @@ class RequestHandler
     {
         $this->debug = ($_SERVER['DEBUG'] == 1);
         $this->processor = new PayloadProcessor();
+        $this->githubMapping = new GithubMapper($_SERVER['GITHUB_MAPPING'] ?? null);
         $this->namespaceMapping = $_SERVER['NAMESPACE_MAPPING'] ?? null;
         $this->shortImageNames = $_SERVER['SHORT_IMAGE_NAMES'] ?? true;
         $this->notifiers = $notifiers;
@@ -111,13 +116,20 @@ class RequestHandler
             list($oldImg, $oldTag) = explode(':', $oldImage);
             list($newImg, $newTag) = explode(':', $newImage);
 
+            $key = sprintf('%s/%s', $namespace, $oldImage);
+            $githubUrl = array_key_exists($key, $this->githubMapping)
+                ? sprintf('[https://github.com/%s/commit/%s]', $this->githubMapping[$key], $newTag)
+                : ''
+            ;
+
             if (is_null($namespace) || $workloadNamespace == $namespace) {
                 $response .= sprintf(
-                    '* [%s] %s updated from %s to %s',
+                    '* [%s] %s updated from %s to %s %s',
                     $workloadNamespace,
                     $oldImg,
                     $oldTag,
-                    $newTag
+                    $newTag,
+                    $githubUrl
                 ) . PHP_EOL;
             }
         }

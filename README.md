@@ -43,5 +43,7 @@ The following environment variables can be set:
 | SLACK_USERNAME    | Username to post to Slack with      | No                       | Flux    |
 | SLACK_ICON        | User icon to post to Slack with     | No                       | :cloud: |
 | NAMESPACE_MAPPING | Namespace notification [mapping][1] | No                       | -       |
+| GITHUB_MAPPING    | Github repository [mapping][2]      | No                       | -       |
 
 [1]: src/Notifier/NamespaceMapper.php
+[2]: src/Notifier/GithubMapper.php
