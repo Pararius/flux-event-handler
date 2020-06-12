@@ -116,9 +116,9 @@ class RequestHandler
             list($oldImg, $oldTag) = explode(':', $oldImage);
             list($newImg, $newTag) = explode(':', $newImage);
 
-            $key = sprintf('%s/%s', $namespace, $oldImage);
-            $githubUrl = array_key_exists($key, $this->githubMapping)
-                ? sprintf('[https://github.com/%s/commit/%s]', $this->githubMapping[$key], $newTag)
+            $key = sprintf('%s/%s', $workloadNamespace, $oldImg);
+            $githubUrl = array_key_exists($key, $this->githubMapping->githubMap)
+                ? sprintf('[https://github.com/%s/commit/%s]', $this->githubMapping->githubMap[$key], $newTag)
                 : ''
             ;
 
