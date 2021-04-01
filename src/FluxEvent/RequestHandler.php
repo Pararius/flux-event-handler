@@ -118,6 +118,9 @@ class RequestHandler
             list($newImg, $newTag) = explode(':', $newImage);
 
             $img = sprintf("<%s|%s>", $oldImg, $bareImage);
+            if (substr_count($img, '/') < 2) {
+                $img = sprintf("hub.docker.com/r/%s", $img);
+            }
 
             $key = sprintf('%s/%s', $workloadNamespace, $oldImg);
             $githubUrl = array_key_exists($key, $this->githubMapping->githubMap)
