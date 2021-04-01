@@ -108,6 +108,7 @@ class RequestHandler
         foreach ($processedPayload->changes as $oldImage => $newImage) {
             $workloadNamespace = $processedPayload->namespaces[$oldImage];
 
+            $bareImage = explode(':', $oldImage)[0];
             if ($this->shortImageNames) {
                 $oldImage = $this->shortImage($oldImage);
                 $newImage = $this->shortImage($newImage);
@@ -116,9 +117,11 @@ class RequestHandler
             list($oldImg, $oldTag) = explode(':', $oldImage);
             list($newImg, $newTag) = explode(':', $newImage);
 
+            $img = sprintf("<%s|%s>", $bareImage, $oldImg);
+
             $key = sprintf('%s/%s', $workloadNamespace, $oldImg);
             $githubUrl = array_key_exists($key, $this->githubMapping->githubMap)
-                ? sprintf('[https://github.com/%s/commit/%s]', $this->githubMapping->githubMap[$key], $newTag)
+                ? sprintf('[<https://github.com/%s/commit/%s|Upstream commit>]', $this->githubMapping->githubMap[$key], $newTag)
                 : ''
             ;
 
@@ -126,7 +129,7 @@ class RequestHandler
                 $response .= sprintf(
                     '* [%s] %s updated from %s to %s %s',
                     $workloadNamespace,
-                    $oldImg,
+                    $img,
                     $oldTag,
                     $newTag,
                     $githubUrl

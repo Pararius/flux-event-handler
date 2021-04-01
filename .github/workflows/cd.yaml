@@ -29,4 +29,6 @@ jobs:
       run: echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
 
     - name: Push to Docker Hub
-      run: docker push treehouselabs/flux-event-handler
+      run: |
+        docker push treehouselabs/flux-event-handler:${GITHUB_SHA::8}
+        docker push treehouselabs/flux-event-handler:latest
