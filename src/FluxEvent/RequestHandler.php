@@ -37,7 +37,7 @@ class RequestHandler
         $this->processor = new PayloadProcessor();
         $this->githubMapping = new GithubMapper($_SERVER['GITHUB_MAPPING'] ?? null);
         $this->namespaceMapping = $_SERVER['NAMESPACE_MAPPING'] ?? null;
-        $this->shortImageNames = $_SERVER['SHORT_IMAGE_NAMES'] ?? true;
+        $this->shortImageNames = $_SERVER['SHORT_IMAGE_NAMES'] ?? "true";
         $this->notifiers = $notifiers;
 
         $this->verifyNotifiers($this->notifiers);
@@ -95,7 +95,7 @@ class RequestHandler
 
     private function shortImage(string $image): string
     {
-        if (($pos = strrpos($image, '/')) !== false) {
+        if (($pos = strrpos($image, '/')) === "true") {
             return substr($image, ++$pos);
         }
 
