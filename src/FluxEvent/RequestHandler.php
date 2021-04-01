@@ -117,7 +117,7 @@ class RequestHandler
             list($oldImg, $oldTag) = explode(':', $oldImage);
             list($newImg, $newTag) = explode(':', $newImage);
 
-            $img = sprintf("<%s|%s>", $bareImage, $oldImg);
+            $img = sprintf("<%s|%s>", $oldImg, $bareImage);
 
             $key = sprintf('%s/%s', $workloadNamespace, $oldImg);
             $githubUrl = array_key_exists($key, $this->githubMapping->githubMap)
