@@ -1,15 +1,15 @@
-FROM php:7.3-cli-alpine AS build
+FROM php:8.0-cli-alpine AS build
 
 WORKDIR /app
 
 ADD composer.json /app
 ADD composer.lock /app
 
-COPY --from=composer:1.9 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN composer install --no-dev --optimize-autoloader
 
-FROM php:7.3-cli-alpine
+FROM php:8.0-cli-alpine
 
 WORKDIR /app
 

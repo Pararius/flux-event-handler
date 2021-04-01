@@ -2,13 +2,13 @@
 version: '2'
 services:
   composer:
-    image: composer:1.9
+    image: composer:2
     command: ["install"]
     volumes:
       - .:/app
 
   php:
-    image: php:7.3-cli-alpine
+    image: php:8.0-cli-alpine
     command: ["php", "-d", "zend.assertions=-1", "/app/server.php"]
     environment:
       DEBUG: 1
