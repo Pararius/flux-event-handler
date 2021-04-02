@@ -95,7 +95,7 @@ class RequestHandler
 
     private function shortImage(string $image): string
     {
-        if (($pos = strrpos($image, '/')) === "true") {
+        if (($pos = strrpos($image, '/')) !== false) {
             return substr($image, ++$pos);
         }
 
@@ -109,7 +109,7 @@ class RequestHandler
             $workloadNamespace = $processedPayload->namespaces[$oldImage];
 
             $bareImage = explode(':', $oldImage)[0];
-            if ($this->shortImageNames) {
+            if ($this->shortImageNames === "true") {
                 $oldImage = $this->shortImage($oldImage);
                 $newImage = $this->shortImage($newImage);
             }
