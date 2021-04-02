@@ -120,7 +120,7 @@ class RequestHandler
             if (substr_count($bareImage, '/') < 2) {
                 $bareImage = sprintf("https://hub.docker.com/r/%s", $bareImage);
             } else {
-                $bareImage = sprintf("https://", $bareImage);
+                $bareImage = sprintf("https://%s", $bareImage);
             }
             $img = sprintf("<%s|%s>", $bareImage, $oldImg);
 
