@@ -118,7 +118,9 @@ class RequestHandler
             list($newImg, $newTag) = explode(':', $newImage);
 
             if (substr_count($bareImage, '/') < 2) {
-                $bareImage = sprintf("hub.docker.com/r/%s", $bareImage);
+                $bareImage = sprintf("https://hub.docker.com/r/%s", $bareImage);
+            } else {
+                $bareImage = sprintf("https://", $bareImage);
             }
             $img = sprintf("<%s|%s>", $oldImg, $bareImage);
             if (substr_count($img, '/') < 2) {
