@@ -35,7 +35,7 @@ class PayloadProcessor
                     }
 
                     if (!array_key_exists($oldImage, $processedPayload->namespaces)) {
-                        $namespace = $this->findNamespace($payload, $oldImage);
+                        $namespace = $this->findNamespace($json, $oldImage);
                         $processedPayload->namespaces[$oldImage] = $namespace;
                     }
                 }
@@ -52,8 +52,9 @@ class PayloadProcessor
         return $processedPayload;
     }
 
-    private function findNamespace(object $payload, string $image): string
+    private function findNamespace(string $json, string $image): string
     {
+        $payload = json_decode($json);
         foreach ($payload->Event->metadata->result as $workload => $result) {
             if (!empty($result->PerContainer)) {
                 foreach ($result->PerContainer as $container) {
@@ -68,7 +69,7 @@ class PayloadProcessor
         $logger = new IoLogger();
         $logger->debug(
             'Could not determine namespace from received payload.',
-            explode(PHP_EOL, json_encode($payload, JSON_PRETTY_PRINT))
+            $json)
         );
 
         return 'unknown';
