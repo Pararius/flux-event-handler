@@ -125,19 +125,28 @@ class RequestHandler
             $img = sprintf("<%s|%s>", $bareImage, $oldImg);
 
             $key = sprintf('%s/%s', $workloadNamespace, $oldImg);
-            $githubUrl = array_key_exists($key, $this->githubMapping->githubMap)
-                ? sprintf('[<https://github.com/%s/commit/%s|Upstream commit>]', $this->githubMapping->githubMap[$key], $newTag)
-                : ''
-            ;
-
+            if (array_key_exists($key, $this->githubMapping->githubMap)) {
+                $githubRepo = $this->githubMapping->githubMap[$key];
+                if (preg_match('/^[0-9a-f]{8}$/', $oldTag)) {
+                    $oldTag = sprintf('<https://github.com/%s/commit/%s|%s>', $githubRepo, $oldTag, $oldTag);
+                }
+                if (preg_match('/^[0-9a-f]{8}$/', $newTag)) {
+                    $newTag = sprintf('<https://github.com/%s/commit/%s|%s>', $githubRepo, $newTag, $newTag);
+                }
+                if (preg_match('/^v[0-9.]+$/', $oldTag)) {
+                    $oldTag = sprintf('<https://github.com/%s/releases/tag/%s|%s>', $githubRepo, $oldTag, $oldTag);
+                }
+                if (preg_match('/^v[0-9.]+$/', $newTag)) {
+                    $newTag = sprintf('<https://github.com/%s/releases/tag/%s|%s>', $githubRepo, $newTag, $newTag);
+                }
+            }
             if (is_null($namespace) || $workloadNamespace == $namespace) {
                 $response .= sprintf(
-                    '* [%s] %s updated from %s to %s %s',
+                    '* [%s] %s updated from %s to %s',
                     $workloadNamespace,
                     $img,
                     $oldTag,
-                    $newTag,
-                    $githubUrl
+                    $newTag
                 ) . PHP_EOL;
             }
         }
