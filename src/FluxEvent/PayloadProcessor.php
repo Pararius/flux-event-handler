@@ -69,7 +69,7 @@ class PayloadProcessor
         $logger = new IoLogger();
         $logger->debug(
             'Could not determine namespace from received payload.',
-            $json)
+            $json
         );
 
         return 'unknown';
