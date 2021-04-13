@@ -35,7 +35,7 @@ class PayloadProcessor
                     }
 
                     if (!array_key_exists($oldImage, $processedPayload->namespaces)) {
-                        $namespace = $this->findNamespace($$payload, $oldImage);
+                        $namespace = $this->findNamespace($payload, $oldImage);
                         $processedPayload->namespaces[$oldImage] = $namespace;
                     }
                 }
