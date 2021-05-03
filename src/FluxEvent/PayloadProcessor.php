@@ -66,7 +66,7 @@ class PayloadProcessor
 
         // If no namespace was found, fallback to "unknown", but log the payload for investigation.
         $logger = new IoLogger();
-        $logger->debug('Could not determine namespace from received payload.');
+        $logger->debug(sprintf('Could not determine namespace from received payload for image: %s.', $image));
         $logger->debug(json_encode($payload, JSON_PRETTY_PRINT));
 
         return 'unknown';
